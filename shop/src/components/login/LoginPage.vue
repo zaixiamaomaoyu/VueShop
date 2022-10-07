@@ -78,7 +78,9 @@ export default {
         }
       })
     },
-    reset () {}
+    reset () {
+      this.$refs.loginRef.resetFields()
+    }
   },
   created () {}
 }
