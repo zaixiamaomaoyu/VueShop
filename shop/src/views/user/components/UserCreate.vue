@@ -7,7 +7,7 @@
               @close="handleClose"
               @open="beforeOpen"
               :close-on-click-modal="false">
-      <template>
+      <template v-if="userModel.types === 'create' || userModel.types === 'update'">
         <el-form :rules="rules" :model="userForm" ref="userForm" label-width="80px">
           <template v-if="userModel.types === 'create'">
             <el-form-item label="用户名:" prop='username'>
@@ -36,11 +36,48 @@
           <el-button type="primary" @click="ok">确 定</el-button>
         </span>
       </template>
+      <template v-else>
+        <el-form :model="userInfo">
+          <el-row :gutter="10">
+            <el-col :span='12'>
+              <el-form-item label="角色名称:">
+                <p>{{userInfo.username}}</p>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span='12'>
+              <el-form-item label="角色名称:">
+                <p>{{userInfo.role_name}}</p>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span='20'>
+              <el-form-item label="分配新角色:">
+                <el-select v-model="roleId" placeholder="请选择">
+                  <el-option
+                    v-for="item in roleList"
+                    :key="item.id"
+                    :label="item.roleName"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="handleClose" size="mini">取 消</el-button>
+          <el-button type="primary" @click="ok" size="mini">确 定</el-button>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import api from '@/api/apiMethods'
 export default {
   name: 'UserCreate',
   components: {},
@@ -91,35 +128,56 @@ export default {
           // { pattern: /(^((\+86)|(86))?(1[3-9])\d{9}$)|(^(0\d{2,3})-?(\d{7,8})$)/, message: '输入的手机号码格式不正确，请重新输入', trigger: 'blur' }
           { validator: checkPhone, trigger: 'blur' }
         ]
-      }
+      },
+      userInfo: {},
+      roleList: [],
+      roleId: ''
     }
   },
   computed: {},
   methods: {
     handleClose () {
       this.$emit('userModel-cancel')
-      this.$refs.userForm.clearValidate()
+      if (this.userModel.types === 'create' || this.userModel.types === 'update') {
+        this.$refs.userForm.clearValidate()
+      } else {
+        this.roleId = ''
+      }
     },
     beforeOpen () {
       if (this.userModel.types === 'create') {
         this.userForm = {}
-      } else {
+      } else if (this.userModel.types === 'update') {
         this.userForm = this.userModel.current
-        console.log(this.userForm)
-        console.log(this.userModel)
+      } else {
+        this.userInfo = this.userModel.current
+        this.roleId = this.userInfo.role_name
+        this.getRolesList()
       }
     },
     ok () {
       const self = this
-      self.$refs.userForm.validate(valid => {
-        if (!valid) {
-          return 0
-        } else {
-          const data = {
-            ...self.userForm
+      if (this.userModel.types === 'create' || this.userModel.types === 'update') {
+        self.$refs.userForm.validate(valid => {
+          if (!valid) {
+            return 0
+          } else {
+            const data = {
+              ...self.userForm
+            }
+            self.$emit('userModel-ok', self.userModel.types, data)
           }
-          console.log(data)
-          self.$emit('userModel-ok', self.userModel.types, data)
+        })
+      } else {
+        self.$emit('userModel-ok', self.userModel.types, this.userInfo, this.roleId)
+      }
+    },
+    getRolesList () {
+      api.getRoles().then(res => {
+        if (res.meta.status !== 200) {
+          this.$message.error('获取失败！')
+        } else {
+          this.roleList = res.data ? res.data : []
         }
       })
     }

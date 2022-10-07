@@ -41,7 +41,7 @@
                 <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteClick(scope.row)"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="设置" placement="top-start">
-                <el-button type="warning" size="mini" icon="el-icon-setting"></el-button>
+                <el-button type="warning" size="mini" icon="el-icon-setting" @click="setClick(scope.row)"></el-button>
               </el-tooltip>
             </template>
           </el-table-column>
@@ -146,7 +146,7 @@ export default {
         types: ''
       }
     },
-    userModelOk (type, data) {
+    userModelOk (type, data, roleId) {
       if (type === 'create') {
         api.addUser(data).then(res => {
           if (res.meta.status !== 201) {
@@ -165,6 +165,24 @@ export default {
           console.log(res)
           if (res.meta.status !== 200) {
             this.$message.error('更新失败！')
+          } else {
+            this.$message({
+              type: 'success',
+              message: res.meta.msg
+            })
+            this.getUsers()
+            this.userModel.visible = false
+          }
+        })
+      } else {
+        console.log(data, roleId)
+        api.setUserRole(data.id, { rid: roleId }).then(res => {
+          console.log(res)
+          if (res.meta.status !== 200) {
+            this.$message({
+              type: 'error',
+              message: res.meta.msg
+            })
           } else {
             this.$message({
               type: 'success',
@@ -204,6 +222,14 @@ export default {
       }).catch(() => {
         this.$message.info('已取消删除！')
       })
+    },
+    setClick (val) {
+      this.userModel = {
+        title: '设置用户',
+        current: val,
+        visible: true,
+        types: 'setUser'
+      }
     }
   },
   created () {
