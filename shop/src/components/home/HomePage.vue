@@ -80,7 +80,6 @@ export default {
           this.$message.error('获取菜单列表失败！')
         } else {
           this.menusList = res.data
-          console.log(this.menusList)
         }
       })
     },
@@ -148,6 +147,9 @@ export default {
               }
             }
           }
+        }
+        .el-main {
+          background-color: #E9EDF1;
         }
       }
     }
