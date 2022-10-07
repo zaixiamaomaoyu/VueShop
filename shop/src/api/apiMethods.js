@@ -59,6 +59,76 @@ const getApi = {
       url: 'users/' + id,
       method: 'delete'
     })
+  },
+
+  // ## 1.4. 权限管理
+  // 1.4.1. 所有权限列表
+  getRights: function () {
+    return request({
+      url: 'rights/list',
+      method: 'get'
+    })
+  },
+
+  // 树形结构
+  getRightsByTree: function () {
+    return request({
+      url: 'rights/tree',
+      method: 'get'
+    })
+  },
+
+  // 1.5. 角色管理
+  // 1.5.1. 角色列表
+  getRoles: function () {
+    return request({
+      url: 'roles',
+      method: 'get'
+    })
+  },
+
+  // 1.5.2. 添加角色
+  addRoles: function (data) {
+    return request({
+      url: 'roles',
+      method: 'post',
+      data
+    })
+  },
+  // 1.5.4. 编辑提交角色
+  editRoles: function (data) {
+    return request({
+      url: `roles/${data.id}`,
+      method: 'put',
+      data
+    })
+  },
+
+  // 1.5.5. 删除角色
+  deleteRoles: function (id) {
+    return request({
+      url: `roles/${id}`,
+      method: 'delete'
+    })
+  },
+
+  // 1.5.6. 角色授权
+  setRoles: function (roleId, data) {
+    console.log(data)
+    return request({
+      url: `roles/${roleId}/rights`,
+      method: 'post',
+      data
+    })
+  },
+
+  // 1.5.7. 删除角色指定权限
+  deleteRoleById: function (roleId, rightId) {
+    return request({
+      // url: 'roles/' + roleId + '/rights/' + rightId,
+      url: `roles/${roleId}/rights/${rightId}`,
+      method: 'delete'
+    })
   }
 }
 
