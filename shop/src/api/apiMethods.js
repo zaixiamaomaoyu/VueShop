@@ -61,6 +61,15 @@ const getApi = {
     })
   },
 
+  // 1.3.7. 分配用户角色
+  setUserRole: function (id, data) {
+    return request({
+      url: `users/${id}/role`,
+      method: 'put',
+      data
+    })
+  },
+
   // ## 1.4. 权限管理
   // 1.4.1. 所有权限列表
   getRights: function () {
@@ -127,6 +136,41 @@ const getApi = {
     return request({
       // url: 'roles/' + roleId + '/rights/' + rightId,
       url: `roles/${roleId}/rights/${rightId}`,
+      method: 'delete'
+    })
+  },
+
+  // 1.6.1. 商品分类数据列表
+  getCateList: function (params) {
+    return request({
+      url: 'categories',
+      method: 'get',
+      params
+    })
+  },
+
+  // 1.6.2. 添加分类
+  addCate: function (data) {
+    return request({
+      url: 'categories',
+      method: 'post',
+      data
+    })
+  },
+
+  // 1.6.4. 编辑提交分类
+  editCate: function (data) {
+    return request({
+      url: `categories/${data.cat_id}`,
+      method: 'put',
+      data
+    })
+  },
+
+  // 1.6.5. 删除分类
+  deleteCate: function (data) {
+    return request({
+      url: `categories/${data.cat_id}`,
       method: 'delete'
     })
   }

@@ -6,6 +6,9 @@ import WelcomePage from 'components/home/child/WelcomePage'
 import UserPage from 'views/user/UserPage'
 import RolePage from 'views/rights/roles/RolePage'
 import RightPage from 'views/rights/rightList/RightPage'
+import CateParams from 'views/goods/CateParams'
+import GoodsCate from 'views/goods/GoodsCate'
+import GoodsList from 'views/goods/GoodsList'
 
 Vue.use(VueRouter)
 
@@ -49,6 +52,21 @@ const routes = [
         name: 'right',
         path: '/rights',
         component: RightPage
+      },
+      {
+        name: 'cateParams',
+        path: '/params',
+        component: CateParams
+      },
+      {
+        name: 'goodsCate',
+        path: '/categories',
+        component: GoodsCate
+      },
+      {
+        name: 'goodsList',
+        path: '/goods',
+        component: GoodsList
       }
     ]
   }
