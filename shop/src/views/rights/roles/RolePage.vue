@@ -94,7 +94,6 @@ export default {
   methods: {
     getRolesList () {
       api.getRoles().then(res => {
-        console.log(res)
         if (res.meta.status !== 200) {
           this.$message.error('获取角色列表失败！')
         } else {

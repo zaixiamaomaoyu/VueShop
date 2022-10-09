@@ -87,7 +87,6 @@ export default {
       this.iscollapse = !this.iscollapse
     },
     changeItem (path) {
-      console.log(path)
       window.sessionStorage.setItem('activePath', path)
       // this.activePath = path
     }

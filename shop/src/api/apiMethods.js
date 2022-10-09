@@ -173,6 +173,41 @@ const getApi = {
       url: `categories/${data.cat_id}`,
       method: 'delete'
     })
+  },
+
+  // 1.7.1. 参数列表
+  getCategories: function (id, params) {
+    return request({
+      url: `categories/${id}/attributes`,
+      method: 'get',
+      params
+    })
+  },
+
+  // 1.7.2. 添加动态参数或者静态属性
+  addPaOrAttr: function (id, data) {
+    return request({
+      url: `categories/${id}/attributes`,
+      method: 'post',
+      data
+    })
+  },
+
+  // 1.7.3. 删除参数
+  deletePaOrAttr: function (data) {
+    return request({
+      url: `categories/${data.cat_id}/attributes/${data.attr_id}`,
+      method: 'delete'
+    })
+  },
+
+  // 1.7.5. 编辑提交参数
+  editPaOrAttr: function (val, data) {
+    return request({
+      url: `categories/${val.cat_id}/attributes/${val.attr_id}`,
+      method: 'put',
+      data
+    })
   }
 }
 
